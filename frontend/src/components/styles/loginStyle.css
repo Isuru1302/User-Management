@@ -1,0 +1,27 @@
+@import "~antd/dist/antd.css";
+
+.uk-section{
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    height:100vh
+}
+
+.uk-section h3,.uk-section p,.f-p{
+    color: #ffffff!important;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.uk-card{
+    background: rgba(0, 0, 0, 0.5)!important;
+}
+
+.loginBtn{
+    height: 2.8em;
+    line-height: 2em;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+}
