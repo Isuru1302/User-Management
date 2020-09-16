@@ -1,10 +1,15 @@
 import React from "react";
 import SideNav from '../components/sideNav';
 import '../App.css';
+import CurrentTime from '../components/currentTime';
 
-import { Layout } from 'antd';
+import { Layout, Card, Calendar } from 'antd';
 
 import {
+    DashboardOutlined ,
+    UsergroupAddOutlined,
+    ApiOutlined ,
+    BankOutlined,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     UserOutlined,
@@ -27,8 +32,11 @@ export default class Dashboard extends React.Component{
 
     render() {
         return (
-            <Layout style={{height:"100vh"}}>
+            <Layout className="Layout">
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+                    <br/>
+                    <CurrentTime/>
+                    <hr/>
                     <SideNav/>
                 </Sider>
 
@@ -51,7 +59,46 @@ export default class Dashboard extends React.Component{
                             minHeight: 280,
                         }}
                     >
-                        Content
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12 col-sm-12 col-md-4 mb-sm-2 mb-2">
+                                    <Card className="db-card" style={{background:"#2F90EA"}}>
+                                        <UsergroupAddOutlined style={{ fontSize: '1.8em'}}/>
+                                        <p>Users</p>
+                                        <span className="db-count" style={{color:"#ccfaff"}}>10</span>
+                                    </Card>
+                                </div>
+
+                                <div className="col-12 col-sm-12 col-md-4 mb-sm-2 mb-2">
+                                    <Card className="db-card" style={{background:"#F8A510"}}>
+                                        <ApiOutlined style={{ fontSize: '1.8em'}}/>
+                                        <p>Agents</p>
+                                        <span className="db-count" style={{color:"#fff7cc"}}>10</span>
+                                    </Card>
+                                </div>
+
+                                <div className="col-12 col-sm-12 col-md-4 mb-sm-2 mb-2">
+                                    <Card className="db-card" style={{background:"#DD4141"}}>
+                                        <UserOutlined style={{ fontSize: '1.8em'}}/>
+                                        <p>Leaders</p>
+                                        <span className="db-count" style={{color:"#ffccd7"}}>10</span>
+                                    </Card>
+                                </div>
+                            </div>
+
+                            <hr className="uk-divider-icon"/>
+
+                            <div className="row">
+                                <div className="col-12 col-sm-12 col-md-8">
+
+                                </div>
+
+                                <div className="col-12 col-sm-12 col-md-4">
+                                    <Calendar fullscreen={false} className="db-calender"/>
+                                </div>
+                            </div>
+                        </div>
+
                     </Content>
 
                 </Layout>

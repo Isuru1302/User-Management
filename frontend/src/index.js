@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+
+import App from "./App";
+import Users from './pages/Users';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Dashboard />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
