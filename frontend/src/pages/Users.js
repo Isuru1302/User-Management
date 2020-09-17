@@ -12,7 +12,6 @@ import {
 } from '@ant-design/icons';
 
 
-
 const { Header, Sider, Content } = Layout;
 
 const data = [
@@ -85,6 +84,10 @@ class Dashboard extends SearchWord {
             visible: false,
         });
     };
+
+    componentDidMount() {
+        console.log("requestApiData");
+    }
 
     render() {
 

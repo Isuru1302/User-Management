@@ -2,7 +2,7 @@ import React from "react";
 import '../components/styles/loginStyle.css';
 import BackgroundImage from '../images/loginBack.png';
 
-import { Button } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 
 
 const login=() =>{
@@ -18,38 +18,35 @@ const login=() =>{
                                 <h3 className="uk-card-title uk-text-center font-weight-bold">Insure-ME</h3>
                                 <p className="uk-card-title uk-text-center">Welcome back!</p>
 
-                                <form>
 
-                                    <div className="uk-margin">
-                                        <div className="uk-inline uk-width-1-1">
-                                            <span className="uk-form-icon" uk-icon="icon: mail"/>
-                                            <input className="uk-input uk-form-large" id="uName" type="text"
-                                                   placeholder="Username"
-                                                   required/>
-                                        </div>
-                                    </div>
+                                    <Form>
+                                        <Form.Item
 
-                                    <div className="uk-margin">
-                                        <div className="uk-inline uk-width-1-1">
-                                            <span className="uk-form-icon" uk-icon="icon: lock"/>
-                                            <input className="uk-input uk-form-large" type="password"
-                                                   placeholder="Password"
-                                                   id="password" required/>
-                                        </div>
-                                    </div>
+                                            name="username"
+                                            rules={[{ required: true, message: 'Please input your username!' }]}
+                                        >
+                                            <Input placeholder="User Name"
+                                                   style={{padding:"0.5em"}}/>
+                                        </Form.Item>
 
-                                    <div class="uk-margin">
-                                        {/*<button class="uk-button uk-button-primary uk-button-large uk-width-1-1"*/}
-                                        {/*>Login</button>*/}
-                                        <Button type="primary" block className={"loginBtn"}>Login</Button>
-                                    </div>
+                                        <Form.Item
+                                            name="password"
+                                            rules={[{ required: true, message: 'Please input your password!' }]}
+                                        >
+                                            <Input.Password  placeholder="Email"
+                                                             style={{padding:"0.5em"}}/>
+                                        </Form.Item>
+
+                                        <Form.Item >
+                                            <Button type="primary" htmlType="submit" style={{width:"100%",height:"3em"}}>
+                                                Submit
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
 
                                     <div className="uk-text-small uk-text-center f-p" >
                                         Forgot password? <a href="#" >click here</a>
                                     </div>
-
-                                </form>
-
                             </div>
                         </div>
                     </div>
