@@ -5,6 +5,8 @@ import CurrentTime from '../components/currentTime';
 
 import { Layout, Card, Calendar } from 'antd';
 
+import {allUsers} from '../components/userCount';
+
 import {
     DashboardOutlined ,
     UsergroupAddOutlined,
@@ -18,6 +20,9 @@ import {
 } from '@ant-design/icons';
 
 const { Header, Sider, Content } = Layout;
+
+
+
 export default class Dashboard extends React.Component{
 
     state = {
@@ -29,6 +34,11 @@ export default class Dashboard extends React.Component{
             collapsed: !this.state.collapsed,
         });
     };
+
+    componentDidMount(){
+        
+    }
+
 
     render() {
         return (
@@ -73,7 +83,7 @@ export default class Dashboard extends React.Component{
                                     <Card className="db-card" style={{background:"#F8A510"}}>
                                         <ApiOutlined style={{ fontSize: '1.8em'}}/>
                                         <p>Agents</p>
-                                        <span className="db-count" style={{color:"#fff7cc"}}>10</span>
+                                        <span className="db-count" style={{color:"#fff7cc"}}>3</span>
                                     </Card>
                                 </div>
 

@@ -1,10 +1,12 @@
 import React, {Component} from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import SideNav from '../components/sideNav';
 import '../App.css';
 import CurrentTime from '../components/currentTime';
 import SearchWord from "../components/SearchWord";
 
-import { Table, Layout } from 'antd';
+import {Table, Layout, Tooltip} from 'antd';
 
 import {
     MenuUnfoldOutlined,
@@ -12,43 +14,34 @@ import {
 
 } from '@ant-design/icons';
 
+import { requestTeamLeaders} from '../actions';
+import {NavLink} from "react-router-dom";
+import handleAction from "../components/deleteUser";
 
 const { Header, Sider, Content } = Layout;
-
-const data = [
-    {
-        key: '1',
-        name: 'John Brown',
-        email: 'john@gmail.com',
-        dob: '27-01-1997',
-        role:'Agent',
-        department:'D1'
-    },
-    {
-        key: '2',
-        name: 'Jim Green',
-        email: 'jim@gmail.com',
-        dob: '28-01-1997',
-        role:'Team-Leader',
-        department:'D2',
-    },
-
-
-];
 
 function deleteAgent() {
     alert("Agent Deleted");
 }
 
-class Dashboard extends SearchWord{
+class TeamLeaders extends SearchWord{
 
     state = {
         collapsed: false,
 
     };
 
-    render() {
+    componentDidMount(){
+        this.props.requestTeamLeaders();
+        this.getUserData();
+    }
 
+    getUserData(){
+
+    }
+
+    render() {
+        const { results = [] } = this.props.data;
         let { sortedInfo2, filteredInfo2 } = this.state;
         sortedInfo2 = sortedInfo2 || {};
         filteredInfo2 = filteredInfo2 || {};
@@ -56,46 +49,33 @@ class Dashboard extends SearchWord{
         const columns = [
             {
                 title: 'Name',
-                dataIndex: 'name',
-                key: 'name',
+                dataIndex: 'Name',
+                key: 'Name',
                 ...this.getColumnSearchProps('name'),
             },
             {
                 title: 'Email',
-                dataIndex: 'email',
-                key: 'email',
+                dataIndex: 'Email',
+                key: 'Email',
                 ...this.getColumnSearchProps('email'),
             },
             {
                 title: 'DOB',
-                dataIndex: 'dob',
-                key: 'dob',
+                dataIndex: 'DOB',
+                key: 'DOB',
                 sorter: (a, b) => a.dob - b.dob,
-                sortOrder: sortedInfo2.columnKey === 'dob' && sortedInfo2.order,
+                sortOrder: sortedInfo2.columnKey === 'DOB' && sortedInfo2.order,
                 ellipsis: true,
-            },
-
-            {
-                title: 'Department',
-                dataIndex: 'department',
-                Key: 'department',
-                filters: [
-                    { text: 'D1', value: 'D1' },
-                    { text: 'D2', value: 'D2' },
-                ],
-                filteredValue2: filteredInfo2.department || null,
-                onFilter: (value, record) => record.department.includes(value),
             },
 
             {
                 title: "Action",
                 dataIndex: '',
                 key: 'x',
-                render(){
-                    return(
-                        <button className="deleteBtn" onDoubleClick={deleteAgent}>x</button>
+                render: (record) =>
+                    (
+                        <button className="deleteBtn" onClick={() => handleAction(record._id)}>x</button>
                     )
-                }
             },
         ];
 
@@ -129,9 +109,15 @@ class Dashboard extends SearchWord{
                     >
                         <div className="container">
 
+                            <Tooltip title="New User" >
+                                <NavLink to="/newUser/TeamLead">
+                                    <button className="add-new">+</button>
+                                </NavLink>
+                            </Tooltip>
+
                             <h3 className="tab-header"><b>All-Team Leaders</b></h3>
 
-                            <Table columns={columns} dataSource={data} onChange={this.handleChange}/>
+                            <Table columns={columns} dataSource={results} onChange={this.handleChange}/>
 
                         </div>
 
@@ -142,7 +128,16 @@ class Dashboard extends SearchWord{
         );
     }
 }
+function mapStateToProps(state) {
 
-export default Dashboard;
+    return {
+        data: state.data
+    };
+}
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({ requestTeamLeaders }, dispatch);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TeamLeaders);
 
 

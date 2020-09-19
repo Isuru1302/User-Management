@@ -10,6 +10,9 @@ import {
 } from '@ant-design/icons';
 import {NavLink} from "react-router-dom";
 
+import {loggedUser,logout} from './loginController';
+
+
 const menuTextStyle = {
     fontSize:"16px",
     marginTop:"2px",
@@ -23,7 +26,6 @@ const menuIconStyle = {
 }
 
 
-
 class sideNav extends Component{
 
     state={
@@ -31,6 +33,10 @@ class sideNav extends Component{
     }
 
     componentDidMount() {
+        if(localStorage.getItem('userRole')===null){
+            alert("you should login first");
+            window.location = '/';
+        }
         this.checkPath();
     }
 
@@ -54,11 +60,75 @@ class sideNav extends Component{
         }
     }
 
-    userLogout(){
-        alert("User logout");
-    }
-
     render() {
+        const details = loggedUser();
+
+        let menuItem;
+        let menuItem1,menuItem2;
+
+        let userItem;
+
+
+        if(details.userRole==="2" ){
+            userItem =  <Menu.Item key="2" >
+                <NavLink to="/Users">
+                    <UsergroupAddOutlined style={menuIconStyle}/>
+                    <span style={menuTextStyle}>Users</span>
+                </NavLink>
+            </Menu.Item>;
+        }else if(details.userRole==="1" ){
+
+            userItem =  <Menu.Item key="2" >
+                <NavLink to="/Users">
+                    <UsergroupAddOutlined style={menuIconStyle}/>
+                    <span style={menuTextStyle}>Users</span>
+                </NavLink>
+            </Menu.Item>;
+
+            menuItem =
+                <Menu.Item key="4">
+                    <NavLink to="/TeamLeaders">
+                        <UsergroupAddOutlined style={menuIconStyle}/>
+                        <span style={menuTextStyle}>Team Lead</span>
+                    </NavLink>
+                </Menu.Item>
+
+        }else if(details.userRole==="0"){
+
+            userItem =  <Menu.Item key="2" >
+                <NavLink to="/Users">
+                    <UsergroupAddOutlined style={menuIconStyle}/>
+                    <span style={menuTextStyle}>Users</span>
+                </NavLink>
+            </Menu.Item>;
+
+            menuItem =
+
+                <Menu.Item key="5">
+                    <NavLink to="/Manager">
+                        <UsergroupAddOutlined style={menuIconStyle}/>
+                        <span style={menuTextStyle}>Manager</span>
+                    </NavLink>
+                </Menu.Item>;
+
+            menuItem1 =
+                <Menu.Item key="4">
+                    <NavLink to="/TeamLeaders">
+                        <UsergroupAddOutlined style={menuIconStyle}/>
+                        <span style={menuTextStyle}>Team Lead</span>
+                    </NavLink>
+                </Menu.Item>;
+
+            menuItem2 =
+                <Menu.Item key="3">
+                    <NavLink to="/Agents">
+                        <UsergroupAddOutlined style={menuIconStyle}/>
+                        <span style={menuTextStyle}>Agents</span>
+                    </NavLink>
+                </Menu.Item>
+        }
+
+
         return(
             <Menu theme="dark" mode="inline" defaultSelectedKey={['1']}>
                 <Menu.Item key="1">
@@ -68,35 +138,11 @@ class sideNav extends Component{
                     </NavLink>
                 </Menu.Item>
 
-                <Menu.Item key="2">
-                    <NavLink to="/Users">
-                        <UsergroupAddOutlined style={menuIconStyle}/>
-                        <span style={menuTextStyle}>Users</span>
-                    </NavLink>
-                </Menu.Item>
-
-                <Menu.Item key="3">
-                    <NavLink to="/Agents">
-                        <UsergroupAddOutlined style={menuIconStyle}/>
-                        <span style={menuTextStyle}>Agents</span>
-                    </NavLink>
-                </Menu.Item>
-
-                <Menu.Item key="4">
-                    <NavLink to="/TeamLeaders">
-                        <UsergroupAddOutlined style={menuIconStyle}/>
-                        <span style={menuTextStyle}>Team Lead</span>
-                    </NavLink>
-                </Menu.Item>
-
-                <Menu.Item key="5">
-                    <NavLink to="/Manager">
-                        <UsergroupAddOutlined style={menuIconStyle}/>
-                        <span style={menuTextStyle}>Manager</span>
-                    </NavLink>
-                </Menu.Item>
-
-                <Menu.Item key="6" onClick={ this.userLogout } icon={<LogoutOutlined  style={menuIconStyle}/>}>
+                {userItem}
+                {menuItem}
+                {menuItem1}
+                {menuItem2}
+                <Menu.Item key="6" onClick={ logout } icon={<LogoutOutlined  style={menuIconStyle}/>}>
                     <span style={menuTextStyle}>Log-Out</span>
                 </Menu.Item>
             </Menu>

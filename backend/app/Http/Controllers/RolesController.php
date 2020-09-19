@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Roles;
+use App\Users;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RolesController extends Controller
 {
     public function getAllRoles(){
-        $role = Roles::all();
-        return response()->json(['allDepartments'=>$role],201);
+        $role = DB::table('roles')->first();
+        return response()->json(['results'=>$role],201);
     }
 
     public function getRoleByID($id){
-        $role = Roles::find($id);
-        return response()->json(['Department'=>$role],201);
+        $role = DB::table('roles')->where('rID' ,'=',$id)->first();
+        return response()->json(['results'=>$role],201);
     }
 }

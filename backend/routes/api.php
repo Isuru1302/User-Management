@@ -14,12 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/login' ,[
+    'uses' => 'UsersController@login'
+]);
+
 Route::get('/allUsers' ,[
     'uses' => 'UsersController@getAllUsers'
 ]);
 
 Route::post('/newUser' ,[
     'uses' => 'UsersController@addNewUser'
+]);
+
+Route::get('/userByID/{id}' ,[
+    'uses' => 'UsersController@getUserByID'
 ]);
 
 Route::post('/upUser/{id}' ,[
@@ -30,9 +38,15 @@ Route::get('/usersByD/{id}' ,[
     'uses' => 'UsersController@usersByDepartment'
 ]);
 
-Route::get('/usersByR/{id}' ,[
+Route::get('/usersByR/{rID}' ,[
     'uses' => 'UsersController@usersByRole'
 ]);
+
+Route::get('/usersByRnD/{dID}/{rID}' ,[
+    'uses' => 'UsersController@userByRoleNDep'
+]);
+
+
 
 Route::get('/changeRole/{id}/{rid}' ,[
     'uses' => 'UsersController@changeRole'
@@ -62,4 +76,20 @@ Route::get('/getAllDepartments' ,[
 
 Route::get('/getDepartmentById/{id}' ,[
     'uses' => 'DepartmentsController@getDepartmentByID'
+]);
+
+Route::post('/uploadExcel' ,[
+    'uses' => 'UploadExcelController@excel'
+]);
+
+Route::get('/agentCount' ,[
+    'uses' => 'UsersController@countAgents'
+]);
+
+Route::get('/userCount' ,[
+    'uses' => 'UsersController@countUsers'
+]);
+
+Route::get('/teamCount' ,[
+    'uses' => 'UsersController@countTeam'
 ]);

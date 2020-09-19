@@ -3,7 +3,13 @@ import '../components/styles/loginStyle.css';
 import BackgroundImage from '../images/loginBack.png';
 
 import { Form, Input, Button, Checkbox } from 'antd';
+import {userLogin} from "../components/loginController";
 
+const handleFormSubmit = (values) =>{
+    const uName = values.username;
+    const uPW = values.password;
+    userLogin(uName, uPW);
+}
 
 const login=() =>{
     return(
@@ -19,7 +25,7 @@ const login=() =>{
                                 <p className="uk-card-title uk-text-center">Welcome back!</p>
 
 
-                                    <Form>
+                                    <Form onFinish={(values)=>handleFormSubmit(values)}>
                                         <Form.Item
 
                                             name="username"
@@ -33,7 +39,7 @@ const login=() =>{
                                             name="password"
                                             rules={[{ required: true, message: 'Please input your password!' }]}
                                         >
-                                            <Input.Password  placeholder="Email"
+                                            <Input.Password  placeholder="Password"
                                                              style={{padding:"0.5em"}}/>
                                         </Form.Item>
 

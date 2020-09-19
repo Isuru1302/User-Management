@@ -32,5 +32,9 @@ class Users extends Model
      * @var mixed
      */
     private $Status;
+    /**
+     * @var mixed|string
+     */
+    private $Role;
 
 }

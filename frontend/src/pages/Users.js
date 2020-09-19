@@ -1,9 +1,13 @@
 import React, {Component} from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import SideNav from '../components/sideNav';
 import '../App.css';
 import CurrentTime from '../components/currentTime';
 
-import { Table, Layout ,Tooltip,Modal,Form, Input, InputNumber,Button,DatePicker,Upload,} from 'antd';
+import handleAction from '../components/deleteUser';
+
+import { Table, Layout ,Tooltip,Modal,Form, Input,Button,DatePicker,Upload,} from 'antd';
 import SearchWord from "../components/SearchWord";
 import {
     MenuUnfoldOutlined,
@@ -12,26 +16,13 @@ import {
 } from '@ant-design/icons';
 
 
-const { Header, Sider, Content } = Layout;
+//saga imports
+import {requestApiData} from '../actions';
+import {NavLink} from "react-router-dom";
 
-const data = [
-    {
-        key: '1',
-        name: 'John Brown',
-        email: 'john@gmail.com',
-        dob: '27-01-1997',
-        role:'Agent',
-        department:'D1'
-    },
-    {
-        key: '2',
-        name: 'Jim Green',
-        email: 'jim@gmail.com',
-        dob: '28-01-1997',
-        role:'Team-Leader',
-        department:'D2',
-    },
-];
+import {userRole,userDepartments} from '../components/userD';
+import {loggedUser} from "../components/loginController";
+const { Header, Sider, Content } = Layout;
 
 const layout = {
     labelCol: { span: 5 },
@@ -51,21 +42,18 @@ const validateMessages = {
 }
 
 
-    const onFinish = values => {
-        console.log(values);
-    };
-
-
-function deleteAgent() {
-    alert("Agent Deleted");
-}
-
-class Dashboard extends SearchWord {
+class Users extends SearchWord{
+    componentDidMount() {
+        this.props.requestApiData();
+    }
 
     state = {
+        data:null,
         collapsed: false,
         visible: false,
     };
+
+
 
     showModal = () => {
         this.setState({
@@ -73,24 +61,7 @@ class Dashboard extends SearchWord {
         });
     };
 
-    handleOk = e => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    handleCancel = e => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    componentDidMount() {
-        console.log("requestApiData");
-    }
-
     render() {
-
         let { sortedInfo2, filteredInfo2 } = this.state;
         sortedInfo2 = sortedInfo2 || {};
         filteredInfo2 = filteredInfo2 || {};
@@ -98,58 +69,72 @@ class Dashboard extends SearchWord {
         const columns = [
             {
                 title: 'Name',
-                dataIndex: 'name',
-                key: 'name',
-                //...this.getColumnSearchProps('name'),
+                dataIndex: 'Name',
+                key: 'Name',
+                //...this.getColumnSearchProps('Name'),
             },
             {
                 title: 'Email',
-                dataIndex: 'email',
-                key: 'email',
-                //...this.getColumnSearchProps('email'),
+                dataIndex: 'Email',
+                key: 'Email',
+                //...this.getColumnSearchProps('Email'),
             },
             {
                 title: 'DOB',
-                dataIndex: 'dob',
-                key: 'dob',
+                dataIndex: 'DOB',
+                key: 'DOB',
                 sorter: (a, b) => a.dob - b.dob,
-                sortOrder: sortedInfo2.columnKey === 'dob' && sortedInfo2.order,
+                sortOrder: sortedInfo2.columnKey === 'DOB' && sortedInfo2.order,
                 ellipsis: true,
             },
             {
                 title: 'Role',
-                dataIndex: 'role',
-                Key: 'role',
+                dataIndex: 'Role',
+                Key: 'Role',
                 filters: [
-                    { text: 'Agent', value: 'Agent' },
-                    { text: 'Team-Leader', value: 'Team-Leader' },
+                    { text: 'Agent', value: '3' },
+                    { text: 'Team-Leader', value: '2' },
+                    { text: 'Manager', value: '1' },
+                    { text: 'Trainee', value: '4' },
+                    { text: 'SE', value: '5' },
                 ],
-                filteredValue2: filteredInfo2.role || null,
-                onFilter: (value, record) => record.role.includes(value),
+                filteredValue2: filteredInfo2.Role || null,
+                onFilter: (value, record) => record.Role.includes(value),
+                render:   (record) =>
+
+                    (
+                        <span>{userRole(record)}</span>
+                    )
             },
             {
                 title: 'Department',
-                dataIndex: 'department',
-                Key: 'department',
+                dataIndex: 'Department',
+                Key: 'Department',
                 filters: [
-                    { text: 'D1', value: 'D1' },
-                    { text: 'D2', value: 'D2' },
+                    { text: 'Management', value: '1' },
+                    { text: 'HR', value: '2' },
+                    { text: 'IT', value: '3' },
                 ],
-                filteredValue2: filteredInfo2.department || null,
-                onFilter: (value, record) => record.department.includes(value),
+                filteredValue2: filteredInfo2.Department || null,
+                onFilter: (value, record) => record.Department.includes(value),
+                render:   (record) =>
+
+                    (
+                        <span>{userDepartments(record)}</span>
+                    )
             },
 
             {
                 title: "Action",
                 dataIndex: '',
                 key: 'x',
-                render(){
-                    return(
-                        <button className="deleteBtn" onDoubleClick={deleteAgent}>x</button>
+                render: (record) =>
+                    (
+                        <button className="deleteBtn" onClick={() => handleAction(record._id)}>x</button>
                     )
-                }
             },
         ];
+        const { results = [] } = this.props.data;
 
         return (
 
@@ -185,63 +170,14 @@ class Dashboard extends SearchWord {
                             <h3 className="tab-header"><b>All-Users</b></h3>
 
                             <Tooltip title="New User" >
-                                <button className="add-new" onClick={this.showModal}>+</button>
+                                <NavLink to="/newUser/User">
+                                    <button className="add-new">+</button>
+                                </NavLink>
                             </Tooltip>
 
-                            <>
-                                <Modal
-                                    title="Add New User"
-                                    visible={this.state.visible}
-                                    onOk={this.handleOk}
-                                    onCancel={this.handleCancel}
-                                >
-
-                                    <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
-                                        <Form.Item name={['user', 'excel']} label="Excel Sheet" rules={[{ required: true }]}>
-                                            <Upload.Dragger name="files" action="/upload.do">
-                                                <p className="ant-upload-drag-icon">
-                                                    <InboxOutlined />
-                                                </p>
-                                                <p className="ant-upload-text">Click or drag excel sheet to this area to upload</p>
-                                                </Upload.Dragger>
-                                        </Form.Item>
-
-                                        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-                                            <Button type="primary" htmlType="submit">
-                                                Submit
-                                            </Button>
-                                        </Form.Item>
-                                    </Form>
-
-                                    <h5 style={{textAlign:"center"}}><b>Or</b></h5>
-
-                                    <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
-                                        <Form.Item name={['user', 'name']} label="Name" rules={[{ required: true }]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item name={['user', 'email']} label="Email" rules={[{ type: 'email',required: true }]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item name={['user', 'dob']} label="Dob" rules={[{ required: true}]}>
-                                            <DatePicker style={{ width: '100%' }} />
-                                        </Form.Item>
-                                        <Form.Item name={['user', 'role']} label="Role" rules={[{ required: true }]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item name={['user', 'department']} label="Department" rules={[{ required: true }]}>
-                                            <Input />
-                                        </Form.Item>
-                                        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-                                            <Button type="primary" htmlType="submit">
-                                                Submit
-                                            </Button>
-                                        </Form.Item>
-                                    </Form>
-                                </Modal>
-                            </>
 
 
-                            <Table columns={columns} dataSource={data} onChange={this.handleChange}/>
+                            <Table columns={columns} dataSource={results} onChange={this.handleChange}/>
 
                         </div>
 
@@ -255,6 +191,14 @@ class Dashboard extends SearchWord {
     }
 }
 
-export default Dashboard;
+function mapStateToProps(state) {
+    return {
+        data: state.data
+    };
+}
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({ requestApiData }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Users);
 
 
