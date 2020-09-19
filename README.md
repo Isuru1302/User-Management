@@ -50,6 +50,10 @@ php artisan db:seed --class=DefaultData
 php artisan db:seed --class=UserSeeder
 
 
+# Database Name
+InsureME
+
+
 ## Default Login
 | Name          | User Name         | Password      |
 |---------------|-------------------|---------------|
